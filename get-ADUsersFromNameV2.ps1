@@ -11,7 +11,7 @@ class User {
 }
 
 $List = Get-Content ".\List.txt"
-$aResults = get-UserObjects -Names $List | get-UserObjects
+$aResults = get-UserObjects -Names $List | get-ADUserCollection
             
 # ForEach($Item in $List){
 #     $Item = $Item.Trim()
