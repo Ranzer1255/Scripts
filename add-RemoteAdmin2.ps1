@@ -5,7 +5,7 @@ param(
     [parameter(mandatory=$true)]
     [String]$username,
     [parameter(mandatory=$true)]
-    [String]$password,
+    [securestring]$password,
     [parameter(mandatory=$true)]
     [String]$fullname,
     [String]$local_security_group = "Administrators",

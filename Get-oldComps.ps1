@@ -29,7 +29,7 @@ foreach($Computer in $Computers)
 }
 
 $Computers | 
-    Select Name, @{name='LastLogTime'; expression={[datetime]::fromFiletime($_.lastLogontimeStamp)}} | 
-    Sort LastLogTime | Export-Csv -NoTypeInformation -Path $path\Win10Versions.csv
+    Select-Object Name, @{name='LastLogTime'; expression={[datetime]::fromFiletime($_.lastLogontimeStamp)}} | 
+    Sort-Object LastLogTime | Export-Csv -NoTypeInformation -Path $path\Win10Versions.csv
 
 $Computers.Count

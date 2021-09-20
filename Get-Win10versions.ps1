@@ -84,4 +84,4 @@ foreach($Computer in $Computers)
 }
 
 #$Computers | Select Name, operatingSystem | Sort name,operatingSystem | Export-Csv -NoTypeInformation -Path $path\Win10Versions.csv
-$Computers | Select Name, operatingSystem | Group-Object operatingSystem | select count, name |  sort name
+$Computers | Select-Object Name, operatingSystem | Group-Object operatingSystem | Select-Object count, name |  Sort-Object name

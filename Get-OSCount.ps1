@@ -52,7 +52,7 @@ foreach($Computer in $Computers)
     $Computer.OperatingSystem = $Computer.OperatingSystem -replace '®' -replace '™' -replace '专业版','Professional (Ch)' -replace 'Professionnel','Professional (Fr)' 
 }
 
-$Computers | Group-Object operatingSystem | Select Count,Name | Sort Name | Tee-Object -Variable counts
+$Computers | Group-Object operatingSystem | Select-Object Count,Name | Sort-Object Name | Tee-Object -Variable counts
 
 if($Path){
     $counts | Export-Csv -Path $Path\OScount.csv -NoTypeInformation

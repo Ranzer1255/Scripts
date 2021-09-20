@@ -8,7 +8,7 @@ Param (
     [parameter(Mandatory=$true)]
     [string] $computerlist,
 	[parameter(Mandatory=$true)]
-	[string] $password
+	[SecureString] $password
 )
 
 $computers = get-content $computerlist

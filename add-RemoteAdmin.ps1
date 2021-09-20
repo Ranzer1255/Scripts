@@ -5,7 +5,7 @@ param(
     [parameter(mandatory=$true)]
     [String]$username,
     [parameter(mandatory=$true)]
-    [String]$password,
+    [SecureString]$password,
     [parameter(mandatory=$true)]
     [String]$fullname,
     [String]$local_security_group = "Administrators",
@@ -22,7 +22,7 @@ Foreach ($computer in $computers) {
  
     #Check if username exists   
     Try {
-        $users = $comp.psbase.children | select -expand name
+        $users = $comp.psbase.children | Select-Object -expand name
         if ($users -like $username) {
             Write-Host "$username already exists on $computer"
  
@@ -56,7 +56,7 @@ Foreach ($computer in $computers) {
             write-verbose "done adding to group"
  
                 #Validate whether user account has been created or not
-                $users = $comp.psbase.children | select -expand name
+                $users = $comp.psbase.children | Select-Object -expand name
                 if ($users -like $username) {
                     Write-Host "$username has been created on $computer"
                 } else {

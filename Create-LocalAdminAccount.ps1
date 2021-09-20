@@ -11,7 +11,7 @@ password in plain text for account
 param(
     [parameter(Mandatory=$true)]
     [String]$username,
-    [String]$password,
+    [securestring]$password,
     [String]$description
 
 )

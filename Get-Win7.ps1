@@ -53,4 +53,4 @@ foreach($Computer in $Computers)
     $Computer.OperatingSystem = $Computer.OperatingSystem -replace '®' -replace '™' -replace '专业版','Professional (Ch)' -replace 'Professionnel','Professional (Fr)' 
 }
 
-$Computers | Select Name, operatingSystemVersion | Sort operatingSystemVersion,name
+$Computers | Select-Object Name, operatingSystemVersion | Sort-Object operatingSystemVersion,name
