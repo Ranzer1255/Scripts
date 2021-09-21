@@ -26,13 +26,12 @@ $computers = import-csv -path $csvFile
 foreach($computer in $computers) {
 
     $oldName = $computer.name
-    
-    $Error.Clear()
 
 	$serialNumber = (Get-WmiObject -computername $oldName -clas win32_bios|Select-Object -property serialnumber).serialnumber
 
     if($Error[0].FullyQualifiedErrorId -eq "GetWMICOMException,Microsoft.PowerShell.Commands.GetWmiObjectCommand") {
         Write-Output "$oldName did not respond to WMI query"
+        $Error.RemoveAt(0)
         continue
     }
 
