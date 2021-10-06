@@ -16,7 +16,12 @@ param (
 [string]$csvFile,
 
 [parameter(Mandatory=$false)]
-[string]$userName = "jrdillingham@mabankisd.net"
+[string]$userName = "jrdillingham@mabankisd.net",
+
+# Parameter help description
+[Parameter()]
+[Switch]
+$Restart
 )
 
 $creds = get-credential $userName
@@ -27,18 +32,18 @@ foreach($computer in $computers) {
 
     $oldName = $computer.name
 
-	$serialNumber = (Get-WmiObject -computername $oldName -clas win32_bios|Select-Object -property serialnumber).serialnumber
-
-    if($Error[0].FullyQualifiedErrorId -eq "GetWMICOMException,Microsoft.PowerShell.Commands.GetWmiObjectCommand") {
-        Write-Output "$oldName did not respond to WMI query"
-        $Error.RemoveAt(0)
-        continue
+    try{
+        $serialNumber = (Get-WmiObject -computername $oldName -clas win32_bios -ErrorAction stop|Select-Object -property serialnumber).serialnumber
+    }
+    catch{
+            Write-Output "$oldName did not respond to WMI query"
+            continue
     }
 
      
 	$newName = $oldName.Substring(0,1)+$oldName.Substring(3,3)+$oldName.Substring(7,3)+"-"+$serialNumber
-   Write-Output "renaming $oldName to $newName"
+    Write-Output "renaming $oldName to $newName"
 
-	rename-computer -NewName $newName -ComputerName $oldName -DomainCredential $creds -force -Restart -PassThru
+	rename-computer -NewName $newName -ComputerName $oldName -DomainCredential $creds -force -Restart:$Restart -PassThru
 
 }

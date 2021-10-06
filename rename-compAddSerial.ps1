@@ -13,11 +13,25 @@ param (
     # domain credental to use when renaiming the computer
     [Parameter()]
     [System.Management.Automation.PSCredential]
-    $cred
+    $cred,
+
+    # Parameter help description
+    [Parameter()]
+    [switch]
+    $Restart
 )
 
-$serialNumber = (Get-WmiObject -computername $oldName -clas win32_bios|Select-Object -property serialnumber).serialnumber
+try {
+    #get serial number
+    $wmi = Get-WmiObject -computername $oldName -clas win32_bios -ErrorAction Stop | Select-Object -property serialnumber
+    $serialNumber = $wmi.serialnumber
 
-$name = $newName + "-" + $serialNumber;
+    #generate new name
+    $name = $newName + "-" + $serialNumber
 
-rename-computer -ComputerName $oldName -NewName $name -PassThru -DomainCredential $cred -Restart -Force
+    #write name to computer
+    rename-computer -ComputerName $oldName -NewName $name -PassThru -DomainCredential $cred -Restart:$Restart -Force
+}
+catch {
+    "error connecting to $oldName"
+}
