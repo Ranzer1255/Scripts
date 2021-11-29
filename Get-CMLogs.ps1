@@ -101,7 +101,7 @@ function Get-CMLog {
         #endregion define logs locations
 
         #region get best possible log viewer
-        $cmLogViewer = "${env:ProgramFiles(x86)}\Microsoft Endpoint Manager\AdminConsole\bin\CMLogViewer.exe"
+        $cmLogViewer = "${env:ProgramFiles(x86)}\Microsoft Configuration Manager\AdminConsole\bin\CMLogViewer.exe"
         $cmTrace = "$env:windir\CCM\CMTrace.exe"
         if (Test-Path $cmLogViewer) {
             $viewer = $cmLogViewer
@@ -124,14 +124,14 @@ function Get-CMLog {
                 foreach ($log in $logs) {
                     $logName = (Split-Path $log -Leaf) -replace "\.log$"
                     # archived log is named with suffix originalLog-someNumbers.log or as originalLog.lo_
-                    $previousLogs += $availableLogs | where { $_ -match ([Regex]::Escape("$logName") + "-|$logName\.lo_$") } | Select-Object -Last $maxHistory
+                    $previousLogs += $availableLogs | Where-Object { $_ -match ([Regex]::Escape("$logName") + "-|$logName\.lo_$") } | Select-Object -Last $maxHistory
                 }
                 $logs = @($logs) + @($previousLogs) | Select-Object -Unique
             }
 
             if ($viewer -and $viewer -match "CMLogViewer\.exe$") {
                 # open all logs in one CMLogViewer instance
-                $quotedLog = ($logs | % {
+                $quotedLog = ($logs | ForEach-Object {
                         "`"$_`""
                     }) -join " "
                 Start-Process $viewer -ArgumentList $quotedLog
